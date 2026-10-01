@@ -39,8 +39,8 @@ def newsection(character="=", delay=0.5, nl=1, title=""):
     :param title: optional argument which will use centerprint() to put the title in the center of the bar.
     """
     _terminal_size = shutil.get_terminal_size()
+    sleep(delay)
     if title == "":
-        sleep(delay)
         print(f"{style.RESET}{color.BRIGHT_BLACK}{"\n" * nl}{character[0] * _terminal_size.columns}\n{style.RESET}")
     else:
         title = f"{style.RESET}{title}{color.BRIGHT_BLACK}"
