@@ -210,4 +210,4 @@ title = sanitize("  My   Report: Final?  ", "whitespace", "filename")
 ```
 
 # Contributing
-If something is broken or badly written, open an issue! If you know how to fix it yourself, fork the repo, fix it, and open a pull request! If you have tools of your own you'd like to add, open a pull request!
+If something is broken or badly written, open an issue! Please see [CONTRIBUTING.md](https://github.com/Probably-Artemis/assorted-python-tools/blob/main/CONTRIBUTING.md) for more information.
