@@ -121,7 +121,7 @@ print("Hello world!")
 
 ## debug
 
-Provides functions `set_debug` and `deprint`.
+Provides functions `set_debug`, `get_debug` and `deprint`.
 
 The deprint function is identical to the built-in print function, but conditional. By default, deprint will do nothing. When set_debug is used to activate it, deprint will behave exactly like the built-in print function.
 

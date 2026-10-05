@@ -13,6 +13,13 @@ def set_debug(state=True):
     global debug
     debug = state
 
+def get_debug():
+    """Query debug state.
+
+    :returns: debug state boolean
+    """
+    global debug
+    return debug
 
 def deprint(*args, **kwargs):
     """Debug print statement that behaves exactly like a standard print statement.
