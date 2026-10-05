@@ -1,9 +1,54 @@
 """Print a string centered on the terminal, word wrapped and balanced across lines."""
 
 
+import re
 import shutil
 
+from .sanitize import _ANSI, _CONTROL, _INVISIBLE, sanitize
+
 __all__ = ["centerprint"]
+
+# anything that takes up no space on screen: escape sequences, control and invisible characters
+_ZERO_WIDTH = re.compile(f"{_ANSI.pattern}|{_CONTROL.pattern}|{_INVISIBLE.pattern}")
+
+
+def _width(text):
+    """Return how many columns text takes up on screen, ignoring escape sequences and invisible characters.
+
+    :param text: the text to measure.
+    """
+    return len(sanitize(text, "terminal"))
+
+
+def _split_word(word, size):
+    """Break a word into pieces of at most size visible characters, never cutting an escape sequence.
+
+    Zero width parts stay with the visible character after them, so a color code starts the piece it colors.
+
+    :param word: the word to break.
+    :param size: the most visible characters a piece may hold.
+    :return: a list of pieces.
+    """
+    pieces = [""]
+    count = 0
+    position = 0
+    for match in [*_ZERO_WIDTH.finditer(word), None]:
+        end = match.start() if match else len(word)
+        for char in word[position:end]:
+            if count == size:
+                pieces.append("")
+                count = 0
+            pieces[-1] += char
+            count += 1
+        if match:
+            if count == size:
+                pieces.append("")
+                count = 0
+            pieces[-1] += match.group()
+            position = match.end()
+    if len(pieces) > 1 and not _width(pieces[-1]):
+        pieces[-2] += pieces.pop()
+    return pieces
 
 
 def _split_long_words(text, width):
@@ -17,16 +62,17 @@ def _split_long_words(text, width):
     words = []
     breaks = set()
     for word in text.split():
-        if len(word) <= width:
+        length = _width(word)
+        if length <= width:
             words.append(word)
             continue
 
-        pieces = -(-len(word) // width)
-        size = -(-len(word) // pieces)
-        for start in range(0, len(word), size):
-            if start:
+        pieces = -(-length // width)
+        size = -(-length // pieces)
+        for index, piece in enumerate(_split_word(word, size)):
+            if index:
                 breaks.add(len(words))
-            words.append(word[start:start + size])
+            words.append(piece)
     return words, breaks
 
 
@@ -48,7 +94,7 @@ def _joined_width(words, start, end):
     :param start: index of the first word.
     :param end: index one past the last word.
     """
-    return sum(len(word) for word in words[start:end]) + (end - start - 1)
+    return sum(_width(word) for word in words[start:end]) + (end - start - 1)
 
 
 def _greedy_lines(words, breaks, width):
@@ -169,7 +215,7 @@ def centerprint(string, whitespace="-", extra=" ", ret=False):
     built = []
     for index, line in enumerate(lines):
         fill = whitespace if index == middle else extra
-        padding = max(0, columns - len(line) - 2 * len(gap))
+        padding = max(0, columns - _width(line) - 2 * len(gap))
         left = padding // 2
         right = padding - left
         built.append(f"{fill * left}{gap}{line}{gap}{fill * right}")
