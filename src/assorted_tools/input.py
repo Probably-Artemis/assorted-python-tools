@@ -1,4 +1,5 @@
 """Replacement for the built-in input function with styled prompts and default responses."""
+import shutil
 
 from .ansiText import *
 
@@ -15,6 +16,7 @@ def input(prompt="", styling=f"{style.UNDERLINE}", default=""):
     :param default: optional response shown in gray on the input line. Returned if the user enters nothing.
     :return: the user's response as a string, or default if the response was empty.
     """
+    _terminal_size = shutil.get_terminal_size()
     if not default:
         prompt += styling
         response = standardinput(prompt)
@@ -23,7 +25,11 @@ def input(prompt="", styling=f"{style.UNDERLINE}", default=""):
         prompt += creturn
         prompt += styling
         response = standardinput(prompt)
-        if not response:
+        if response:
+            extra = _terminal_size.columns - len(response)
+            up = f"{cursor.COLUMN_1}{cursor.up()}"
+            print(f"{up}{styling}{response}{style.RESET}{" " * extra}")
+        else:
             response = default
     reset()
     return response
