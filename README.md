@@ -178,5 +178,36 @@ from assorted_tools.randomword import randomword
 print(randomword())
 ```
 
+## sanitize
+
+Provides function `sanitize`, and one function for each of its modes.
+
+The sanitize function cleans a string using one or more modes, applied in the order given. A mode is either a name from the table below or your own function that takes a string and returns a string. An unknown mode name raises a `ValueError`. With no mode, `alphanumeric` is used.
+
+| Mode | Function | Use case |
+| --- | --- | --- |
+| `alphanumeric` | `keep_alphanumeric` | Removes everything except letters and digits. |
+| `ansi` | `strip_ansi` | Removes ANSI escape sequences, such as colors and window titles. |
+| `ascii` | `to_ascii` | Strips accents and drops anything with no ASCII form. |
+| `control` | `strip_control` | Removes control characters, keeping tab and newline. |
+| `filename` | `safe_filename` | Makes a name safe for a single file or folder on any system. |
+| `invisible` | `strip_invisible` | Removes zero width characters and text direction overrides. |
+| `slug` | `slugify` | Makes a lowercase identifier of letters, digits, and hyphens. |
+| `terminal` | `terminal_safe` | Runs `ansi`, `control`, and `invisible`, in that order. |
+| `whitespace` | `collapse_whitespace` | Collapses runs of whitespace to one space and trims the ends. |
+
+Order matters when combining modes. Use `ansi` before `control`, or use `terminal` for both.
+
+These modes clean text for display, storage, and naming. They do not make text safe to put inside HTML, SQL, or a shell command.
+
+Example:
+```python
+from assorted_tools.sanitize import sanitize
+
+print(sanitize(untrusted_text, "terminal"))
+
+title = sanitize("  My   Report: Final?  ", "whitespace", "filename")
+```
+
 # Contributing
 If something is broken or badly written, open an issue! If you know how to fix it yourself, fork the repo, fix it, and open a pull request! If you have tools of your own you'd like to add, open a pull request!
