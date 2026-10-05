@@ -93,7 +93,7 @@ You may use a wildcard import to import everything a specific module provides, b
 
 ## ansiText
 
-Provides classes `style` and `color`, and function `reset`.
+Provides classes `cursor`, `style` and `color`, and functions `reset` and `color_allowed`.
 
 Eases formatting text output by providing more memorable names for ANSI codes.
 
