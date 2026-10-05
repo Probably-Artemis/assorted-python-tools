@@ -2,6 +2,7 @@
 
 import re
 
+__all__ = ["sanitize"]
 
 def sanitize(content, mode=""):
     mode=mode.lower()
