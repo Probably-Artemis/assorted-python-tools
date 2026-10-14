@@ -165,18 +165,36 @@ The slowprint function takes a string and prints it out character by character.
 
 ## randomword
 
-Provides functions `randomword` and `randomwords`.
+Provides functions `randomword` and `randomwords`, and the tuple `KINDS`.
 
 The randomword function returns a randomly selected English word. Randomness uses `secrets`, and is thus viable for use in a password generator.
 
-The randomword**s** function returns a random number of random words. The function takes two integers, which set the range of how many words get returned inclusive. By default it returns a string; set `string=False` to get a list instead.
+The randomword**s** function returns a random number of random words. The function takes two integers, which set the range of how many words get returned inclusive. By default it returns a list; set `string=True` to get one space-separated string instead.
+
+Both functions take an optional `kind` to pick only one type of word. A kind not in the table raises a `ValueError`. With no kind, any word can come up.
+
+| Kind | Example |
+| --- | --- |
+| `noun` | `lantern` |
+| `verb` | `greet` |
+| `adjective` | `sudden` |
+| `adverb` | `softly` |
+| `proper` | `Boston` |
+| `name` | `John` |
+| `surname` | `Smith` |
+
+Proper nouns are named people, places, gods, and the like. Names are first names. Proper nouns, names, and surnames are capitalized. All other words are lowercase.
 
 Example:
 ```python
-from assorted_tools.randomword import randomword
+from assorted_tools.randomword import randomword, randomwords
 
 print(randomword())
+print(randomword("adjective"), randomword("noun"))
+print(randomwords(2, 4, string=True, kind="verb"))
 ```
+
+The word lists for each kind come from [Open English WordNet](https://github.com/globalwordnet/english-wordnet) (CC BY 4.0) and the [1990 US Census name files](https://www2.census.gov/topics/genealogy/1990surnames/) (public domain).
 
 ## sanitize
 
