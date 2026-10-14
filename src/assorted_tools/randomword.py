@@ -17,13 +17,13 @@ def randomword():
     """Return one random English word. Randomness pulls from device entropy."""
     return choice(words)
 
-def randomwords(a, b, string=True):
+def randomwords(a, b, string=False):
     """Return a random number of random words, between a and b inclusive.
 
     :param a: start of the random range.
     :param b: end of the random range.
     :param string: if true, return one space-separated string; if false, return a list.
-    :return: the words as a string, or as a list when string is false.
+    :return: the words as a list, or as a string when string is true.
     """
     output = " ".join(randomword() for _ in range(randint(a, b)))
     if string:
