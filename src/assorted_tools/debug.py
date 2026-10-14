@@ -1,6 +1,6 @@
 """Utilities to make toggling debug print statements easier."""
 
-__all__ = ["set_debug", "deprint"]
+__all__ = ["deprint", "get_debug", "set_debug"]
 
 debug = False
 
@@ -18,7 +18,6 @@ def get_debug():
 
     :returns: debug state boolean
     """
-    global debug
     return debug
 
 def deprint(*args, **kwargs):
