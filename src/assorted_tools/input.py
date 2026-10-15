@@ -21,6 +21,8 @@ def input(prompt="", styling=f"{style.UNDERLINE}", default=""):
         prompt += styling
         response = standardinput(prompt)
     else:
+        if prompt[-1] == "\n":
+            prompt = prompt[:-1]
         creturn = f"\n{color.BRIGHT_BLACK}{default}{style.RESET}{style.CARRIAGE_RETURN}"
         prompt += creturn
         prompt += styling
